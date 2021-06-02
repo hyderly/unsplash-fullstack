@@ -1,0 +1,144 @@
+@import url("https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  margin: 0;
+  font-family: "Odibee Sans", cursive;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.form-box {
+  width: 60rem;
+  min-height: 50vh;
+  background-color: #3aafa9;
+  color: #17252a;
+  margin: 5rem auto;
+  border-radius: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 5rem 1rem;
+}
+
+.form-title {
+  font-size: 4rem;
+  letter-spacing: 0.5rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #17252a;
+}
+
+.form-box form {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-box form input {
+  padding: 1.6rem 10rem;
+  border: none;
+  outline: none;
+  color: #17252a;
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  border-radius: 0.6rem;
+}
+
+.btn-primary {
+  padding: 1rem 4rem;
+  font-size: 1.6rem;
+  color: #17252a;
+  background-color: #f8f8f8;
+  border: 0.2rem solid transparent;
+  outline: none;
+  border-radius: 0.3rem;
+}
+
+.btn-primary:hover {
+  color: #f8f8f8;
+  background-color: transparent;
+  cursor: pointer;
+  border: 0.2rem solid #f8f8f8;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.errorMessage {
+  font-size: 1.2rem;
+  background-color: #f85a4f;
+  padding: 0.5rem;
+  margin-bottom: 3rem;
+  font-weight: bold;
+  position: absolute;
+  letter-spacing: .3rem;
+  left: 0;
+  bottom: -4rem;
+  transition: 1s all ease-in-out;
+}
+
+.home {
+  margin-top: 10rem;
+  letter-spacing: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-title {
+  font-size: 3.4rem;
+  color: #17252a;
+  font-weight: bold;
+}
+
+.features {
+  color: #17252a;
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.features h2 {
+  color: #17252a;
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 1.8rem;
+}
+
+.features p {
+  color: #17252a;
+  font-size: 2.2rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.form-link {
+  margin-top: 2rem;
+  font-size: 2rem;
+  color: #f8f8f8;
+  text-decoration: none;
+}
+
+.form-link:hover {
+  text-decoration: underline;
+}
