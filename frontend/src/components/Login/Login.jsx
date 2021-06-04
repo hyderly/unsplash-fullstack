@@ -45,7 +45,7 @@ const Login = () => {
               />
             </div>
             <button type="submit" className="btn-primary">
-              Submit
+            Login
             </button>
             <Link className="form-link" to="/register">
               Not a member ?
