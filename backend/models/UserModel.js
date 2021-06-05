@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -20,8 +21,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is requireddd"],
   },
-  isAdmin: false,
-  isActive: false,
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  emailVerifyToken: String,
+  emailVerifyExpiry: Date,
+  resetPasswordToken: String,
+  resetPasswordExpiry: Date,
 });
 
 userSchema.pre("save", async function (next) {
@@ -34,6 +45,32 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return bcrypt.compare(enteredPassword, this.password);
+};
+
+userSchema.methods.getVerifyToken = async function () {
+  const verifyToken = crypto.randomBytes(20).toString("hex");
+
+  this.emailVerifyToken = crypto
+    .createHash("sha256")
+    .update(verifyToken)
+    .digest("hex");
+
+  this.emailVerifyExpiry = Date.now() + 10 * 60 * 1000;
+
+  return verifyToken;
+};
+
+userSchema.methods.getResetPasswordToken = async function () {
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.resetPasswordExpiry = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
 };
 
 const UserModel = mongoose.model("user", userSchema);
