@@ -1,9 +1,16 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 
+import { userRegiterAction } from "../../redux/user/user.actions";
+
 const Register = () => {
+  const dispatch = useDispatch();
+  const userRegister = useSelector(state => state.userRegister);
+  const { loading, success, message, error } = userRegister;
+
   const registerSchema = yup.object().shape({
     name: yup.string().required("Name is Required"),
     email: yup.string().email("Invalid email").required("Email is Required"),
@@ -31,7 +38,7 @@ const Register = () => {
       }}
       validationSchema={registerSchema}
       onSubmit={(values, { setSubmitting }) => {
-        console.log(values);
+        dispatch(userRegiterAction(values.name, values.email, values.password));
       }}
     >
       {({ isSubmitted, isValid }) => (
@@ -82,9 +89,14 @@ const Register = () => {
                 className="errorMessage"
               />
             </div>
-            <button type="submit" className="btn-primary">
-              Register
-            </button>
+            {loading ? (
+              <p>...loading...</p>
+            ) : (
+              <button type="submit" className="btn-primary">
+                Register
+              </button>
+            )}
+
             <Link className="form-link" to="/login">
               Already a member ?
             </Link>

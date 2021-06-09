@@ -19,10 +19,6 @@ export const userRegister = asyncHandler(async (req, res) => {
     throw new Error("User Already exist with this email address");
   }
 
-  if (confirmPassword !== password) {
-    throw new Error("Password Must Match");
-  }
-
   // Create new user
   const user = await UserModel.create({ name, email, password });
 
@@ -42,7 +38,9 @@ export const userRegister = asyncHandler(async (req, res) => {
         subject: "Verification Email",
       });
 
-      res.status(200).send("Verification Email has been sent");
+      res
+        .status(200)
+        .json({ success: true, message: "Verification Email Sent" });
     } catch (error) {
       console.log(error);
       user.emailVerifyToken = undefined;
@@ -50,8 +48,7 @@ export const userRegister = asyncHandler(async (req, res) => {
 
       await user.save({ validateBeforeSave: false });
 
-      res.status(500);
-      throw new Error("Email could not be sent");
+      res.status(500).json({ message: "Email could not be sent" });
     }
   }
 });
