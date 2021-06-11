@@ -67,6 +67,11 @@ export const verifyUser = asyncHandler(async (req, res) => {
     emailVerifyExpiry: { $gt: Date.now() },
   });
 
+  if (user.verify) {
+    res.status(400);
+    throw new Error("User Already Verify");
+  }
+
   if (!user) {
     res.status(500);
     throw new Error("Email Not Verify");
@@ -79,7 +84,7 @@ export const verifyUser = asyncHandler(async (req, res) => {
   user.save();
 
   res.status(202).json({
-    message: "USer verified",
+    message: "User verified",
     token: generateWebToken(user._id),
   });
 });
@@ -115,7 +120,7 @@ export const authUser = asyncHandler(async (req, res) => {
       id: user._id,
       isAdmin: user.isAdmin,
       name: user.name,
-      active: user.isActive,
+      verify: user.verify,
       email,
       token: generateWebToken(user._id),
     });

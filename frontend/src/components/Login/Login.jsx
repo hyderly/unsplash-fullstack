@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 
-const Login = () => {
+import { loginAction } from "../../redux/user/user.actions";
+
+import Alert from "../../components/Alert/Alert";
+import Loader from "../Loader/Loader";
+
+const Login = ({ history }) => {
+  const dispatch = useDispatch();
+
+  const userLogin = useSelector(state => state.userLogin);
+  const { loading, success, error, userInfo } = userLogin;
+
+  useEffect(() => {
+    if (success) {
+      history.push("/");
+    }
+  }, [success]);
+
   const loginSchema = yup.object().shape({
     email: yup.string().email("Invalid Email").required("Email is required"),
     password: yup.string().required("Password is required"),
@@ -17,12 +34,19 @@ const Login = () => {
       }}
       validationSchema={loginSchema}
       onSubmit={(values, { setSubmitting }) => {
-        console.log(values);
+        dispatch(loginAction(values.email, values.password));
       }}
     >
       {({ isSubmitted, isValid }) => (
         <div className="form-box">
           <h1 className="form-title">Login</h1>
+          {error ? (
+            <Alert danger>{error}</Alert>
+          ) : success ? (
+            <Alert>{success}</Alert>
+          ) : (
+            ""
+          )}
           <Form>
             <div className="input-group">
               <Field name="email" placeholder="Your Email ... " />
@@ -44,9 +68,14 @@ const Login = () => {
                 className="errorMessage"
               />
             </div>
-            <button type="submit" className="btn-primary">
-            Login
-            </button>
+            {loading ? (
+              <Loader />
+            ) : (
+              <button disabled={loading} type="submit" className="btn-primary">
+                Login
+              </button>
+            )}
+
             <Link className="form-link" to="/register">
               Not a member ?
             </Link>

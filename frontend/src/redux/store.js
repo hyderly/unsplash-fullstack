@@ -5,10 +5,16 @@ import logger from "redux-logger";
 import thunk from "redux-thunk";
 
 // Reducers
-import { registerReducer } from "./user/user.reducers";
+import {
+  registerReducer,
+  loginReducer,
+  verifyUserReducer,
+} from "./user/user.reducers";
 
 const rootReducers = combineReducers({
   userRegister: registerReducer,
+  userLogin: loginReducer,
+  userVerify: verifyUserReducer,
 });
 
 const middlewares = [thunk];
