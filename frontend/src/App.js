@@ -7,6 +7,8 @@ import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
 import Profile from "./components/Profile/Profile";
 import Verify from "./components/Verify/Verify";
+import Forgot from "./components/Forgot/Forgot";
+import ResetPassword from "./components/Reset/Reset";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/verify/:verifyToken" component={Verify} />
         <Route path="/login" component={Login} />
         <Route path="/profile" component={Profile} />
+        <Route path="/forgot" component={Forgot} />
+        <Route path="/resetpassword/:resetToken" component={ResetPassword} />
       </Switch>
     </div>
   );

@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 
-const Profile = () => {
+const Profile = ({ history }) => {
+  const dispatch = useDispatch();
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
+
+  useEffect(() => {
+    if (!userInfo) {
+      history.push("/login");
+    }
+  });
+
   const profileSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
     email: yup.string().required("Email is required"),

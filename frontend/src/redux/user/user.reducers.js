@@ -2,6 +2,8 @@ import {
   UserRegistrationType,
   UserLoginType,
   UserVerifyType,
+  ForgotPasswordType,
+  ResetPasswordType,
 } from "./user.types";
 
 export const registerReducer = (state = {}, action) => {
@@ -57,6 +59,13 @@ export const loginReducer = (state = {}, action) => {
         error: action.payload,
       };
 
+    case UserLoginType.USER_LOGOUT:
+      return {
+        ...state,
+        userInfo: null,
+        success: false,
+      };
+
     default:
       return state;
   }
@@ -78,6 +87,62 @@ export const verifyUserReducer = (state = {}, action) => {
       };
 
     case UserVerifyType.USER_VERIFY_FAIL:
+      return {
+        ...state,
+        success: false,
+        loading: false,
+        error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const forgotPasswordReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ForgotPasswordType.FORGOT_PASSWORD_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case ForgotPasswordType.FORGOT_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+
+    case ForgotPasswordType.FORGOT_PASSWORD_FAIL:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        error: true,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const resetPasswordReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ResetPasswordType.RESET_PASSWORD_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case ResetPasswordType.RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        success: true,
+        loading: false,
+      };
+
+    case ResetPasswordType.RESET_PASSWORD_FAIL:
       return {
         ...state,
         success: false,

@@ -21,9 +21,14 @@
   list-style: none;
 }
 
-.navbar-link > a {
+.navbar-link > a,
+.navbar-link {
   color: #fff;
   font-size: 1.8rem;
   text-decoration: none;
   margin-right: 3rem;
+}
+
+.navbar-link:hover {
+  cursor: pointer;
 }

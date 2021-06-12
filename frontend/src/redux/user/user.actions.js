@@ -4,6 +4,8 @@ import {
   UserRegistrationType,
   UserLoginType,
   UserVerifyType,
+  ForgotPasswordType,
+  ResetPasswordType,
 } from "./user.types";
 
 export const userRegiterAction = (name, email, password) => async dispatch => {
@@ -56,12 +58,22 @@ export const loginAction = (email, password) => async dispatch => {
       type: UserLoginType.USER_LOGIN_SUCCESS,
       payload: data,
     });
+
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: UserLoginType.USER_LOGIN_FAIL,
       payload: error.response.data.error,
     });
   }
+};
+
+export const userLogoutAction = () => dispatch => {
+  dispatch({
+    type: UserLoginType.USER_LOGOUT,
+  });
+
+  localStorage.removeItem("userInfo");
 };
 
 export const verifyUserAction = verifyToken => async dispatch => {
@@ -93,3 +105,58 @@ export const verifyUserAction = verifyToken => async dispatch => {
     });
   }
 };
+
+export const forgotPasswordAction = email => async dispatch => {
+  try {
+    dispatch({
+      type: ForgotPasswordType.FORGOT_PASSWORD_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    await axios.post("/api/users/forgotpassword", { email }, config);
+
+    dispatch({
+      type: ForgotPasswordType.FORGOT_PASSWORD_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: ForgotPasswordType.FORGOT_PASSWORD_FAIL,
+      payload: error.response.data.error,
+    });
+  }
+};
+
+export const resetPasswordAction =
+  (password, confirmPassword, resetToken) => async dispatch => {
+    try {
+      dispatch({
+        type: ResetPasswordType.RESET_PASSWORD_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      await axios.put(
+        `/api/users/resetpassword/${resetToken}`,
+        { password, confirmPassword },
+        config
+      );
+
+      dispatch({
+        type: ResetPasswordType.RESET_PASSWORD_SUCCESS,
+      });
+    } catch (error) {
+      dispatch({
+        type: ResetPasswordType.RESET_PASSWORD_FAIL,
+        payload: error.response.data.error,
+      });
+    }
+  };

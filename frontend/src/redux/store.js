@@ -9,13 +9,27 @@ import {
   registerReducer,
   loginReducer,
   verifyUserReducer,
+  forgotPasswordReducer,
+  resetPasswordReducer,
 } from "./user/user.reducers";
+
+// get local values
+
+const userInfoFromLocalStorage = localStorage.getItem("userInfo")
+  ? JSON.parse(localStorage.getItem("userInfo"))
+  : null;
 
 const rootReducers = combineReducers({
   userRegister: registerReducer,
   userLogin: loginReducer,
   userVerify: verifyUserReducer,
+  forgotPassword: forgotPasswordReducer,
+  resetPassword: resetPasswordReducer,
 });
+
+const initialValues = {
+  userLogin: { userInfo: userInfoFromLocalStorage },
+};
 
 const middlewares = [thunk];
 
@@ -25,6 +39,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const store = createStore(
   rootReducers,
+  initialValues,
   composeWithDevTools(applyMiddleware(...middlewares))
 );
 
