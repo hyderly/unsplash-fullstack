@@ -7,6 +7,7 @@ import {
   ForgotPasswordType,
   ResetPasswordType,
   UserProfileType,
+  UserUpdateType,
 } from "./user.types";
 
 export const userRegiterAction = (name, email, password) => async dispatch => {
@@ -72,6 +73,10 @@ export const loginAction = (email, password) => async dispatch => {
 export const userLogoutAction = () => dispatch => {
   dispatch({
     type: UserLoginType.USER_LOGOUT,
+  });
+
+  dispatch({
+    type: UserProfileType.USER_PROFILE_RESET,
   });
 
   localStorage.removeItem("userInfo");
@@ -189,6 +194,37 @@ export const getUserProfileAction = () => async (dispatch, getState) => {
     dispatch({
       type: UserProfileType.USER_PROFILE_FAIL,
       error: error.response.data.error,
+    });
+  }
+};
+
+export const updateUserAction = user => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
+  try {
+    dispatch({
+      type: UserUpdateType.USER_UPDATE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put("/api/users/profile", user, config);
+
+    dispatch({
+      type: UserUpdateType.USER_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: UserUpdateType.USER_UPDATE_FAIL,
+      payload: error.response.data.error,
     });
   }
 };

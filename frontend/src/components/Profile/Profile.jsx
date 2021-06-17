@@ -3,11 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 
-import { getUserProfileAction } from "../../redux/user/user.actions";
+import Alert from "../../components/Alert/Alert";
+import Loader from "../Loader/Loader";
+
+import {
+  getUserProfileAction,
+  updateUserAction,
+} from "../../redux/user/user.actions";
 
 const Profile = ({ history }) => {
-  const [name, setName] = useState("haider ali");
-  const [email, setEmail] = useState("haider.aumer@gmail.com");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
   const dispatch = useDispatch();
 
@@ -15,7 +21,10 @@ const Profile = ({ history }) => {
   const { userInfo } = userLogin;
 
   const userProfile = useSelector(state => state.userProfile);
-  const { loading, success, userDetail, error } = userProfile;
+  const { userDetail } = userProfile;
+
+  const updateUser = useSelector(state => state.updateUser);
+  const { success, error, loading } = updateUser;
 
   useEffect(() => {
     if (!userInfo) {
@@ -33,8 +42,8 @@ const Profile = ({ history }) => {
   }, [userDetail, userInfo]);
 
   const profileSchema = yup.object().shape({
-    name: yup.string().required("Name is required"),
-    email: yup.string().required("Email is required"),
+    name: yup.string(),
+    email: yup.string(),
     password: yup
       .string()
       .required("Password is Required")
@@ -59,12 +68,19 @@ const Profile = ({ history }) => {
       }}
       validationSchema={profileSchema}
       onSubmit={(values, { setSubmitting }) => {
-        console.log(values);
+        dispatch(updateUserAction(values));
       }}
     >
       {({ isSubmitted, isValid }) => (
         <div className="form-box">
           <h1 className="form-title">Profile</h1>
+          {error ? (
+            <Alert danger>{error}</Alert>
+          ) : success ? (
+            <Alert>User Update Successfully</Alert>
+          ) : (
+            ""
+          )}
           <Form>
             <div className="input-group">
               <Field
@@ -87,7 +103,11 @@ const Profile = ({ history }) => {
               />
             </div>
             <div className="input-group">
-              <Field type="text" name="password" placeholder="Your Password " />
+              <Field
+                type="password"
+                name="password"
+                placeholder="Your Password "
+              />
               <ErrorMessage
                 name="password"
                 component="div"
@@ -96,7 +116,7 @@ const Profile = ({ history }) => {
             </div>
             <div className="input-group">
               <Field
-                type="text"
+                type="password"
                 name="confirmPassword"
                 placeholder="Confirm Password"
               />
@@ -106,17 +126,17 @@ const Profile = ({ history }) => {
                 className="errorMessage"
               />
             </div>
-            <button type="submit" className="btn-primary">
-              Update
-            </button>
+            {loading ? (
+              <button className="btn-primary">Updating ...</button>
+            ) : (
+              <button type="submit" className="btn-primary">
+                Update
+              </button>
+            )}
           </Form>
         </div>
       )}
     </Formik>
-
-    // <div className="form-box">
-    //   <h1 className="form-title">Profile</h1>
-    // </div>
   );
 };
 

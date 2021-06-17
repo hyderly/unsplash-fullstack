@@ -12,7 +12,7 @@ const Home = () => (
       <p>User Verification email</p>
       <p>Forgot and Reset Password</p>
       <p>Role Base Authentication</p>
-      <p>Edit Profile</p>
+      <p>Profile & Edit Profile</p>
       <p>Profile Image</p>
     </div>
   </div>

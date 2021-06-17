@@ -12,6 +12,7 @@ import {
   forgotPasswordReducer,
   resetPasswordReducer,
   userProfileReducer,
+  updateUserReducer,
 } from "./user/user.reducers";
 
 // get local values
@@ -27,6 +28,7 @@ const rootReducers = combineReducers({
   forgotPassword: forgotPasswordReducer,
   resetPassword: resetPasswordReducer,
   userProfile: userProfileReducer,
+  updateUser: updateUserReducer,
 });
 
 const initialValues = {
