@@ -4,6 +4,7 @@ import {
   UserVerifyType,
   ForgotPasswordType,
   ResetPasswordType,
+  UserProfileType,
 } from "./user.types";
 
 export const registerReducer = (state = {}, action) => {
@@ -119,7 +120,7 @@ export const forgotPasswordReducer = (state = {}, action) => {
         ...state,
         loading: false,
         success: false,
-        error: true,
+        error: action.payload,
       };
 
     default:
@@ -147,6 +148,35 @@ export const resetPasswordReducer = (state = {}, action) => {
         ...state,
         success: false,
         loading: false,
+        error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const userProfileReducer = (state = { userDetail: {} }, action) => {
+  switch (action.type) {
+    case UserProfileType.USER_PROFILE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UserProfileType.USER_PROFILE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        userDetail: action.payload,
+      };
+
+    case UserProfileType.USER_PROFILE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        success: false,
         error: action.payload,
       };
 

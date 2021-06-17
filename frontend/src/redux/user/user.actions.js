@@ -6,6 +6,7 @@ import {
   UserVerifyType,
   ForgotPasswordType,
   ResetPasswordType,
+  UserProfileType,
 } from "./user.types";
 
 export const userRegiterAction = (name, email, password) => async dispatch => {
@@ -160,3 +161,34 @@ export const resetPasswordAction =
       });
     }
   };
+
+export const getUserProfileAction = () => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
+  try {
+    dispatch({
+      type: UserProfileType.USER_PROFILE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get("/api/users/profile", config);
+
+    dispatch({
+      type: UserProfileType.USER_PROFILE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: UserProfileType.USER_PROFILE_FAIL,
+      error: error.response.data.error,
+    });
+  }
+};

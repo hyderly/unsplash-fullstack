@@ -1,18 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 
+import { getUserProfileAction } from "../../redux/user/user.actions";
+
 const Profile = ({ history }) => {
+  const [name, setName] = useState("haider ali");
+  const [email, setEmail] = useState("haider.aumer@gmail.com");
+
   const dispatch = useDispatch();
+
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
+
+  const userProfile = useSelector(state => state.userProfile);
+  const { loading, success, userDetail, error } = userProfile;
 
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
+    } else {
+      if (!userDetail.name) {
+        dispatch(getUserProfileAction());
+      } else {
+        setName(userDetail.name);
+        setEmail(userDetail.email);
+      }
     }
-  });
+
+    console.log(name, email);
+  }, [userDetail, userInfo]);
 
   const profileSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
@@ -34,8 +52,8 @@ const Profile = ({ history }) => {
   return (
     <Formik
       initialValues={{
-        name: "Haider",
-        email: "haider@gmail.com",
+        name: name,
+        email: email,
         password: "",
         confirmPassword: "",
       }}
@@ -51,7 +69,7 @@ const Profile = ({ history }) => {
             <div className="input-group">
               <Field
                 type="text"
-                name="name"
+                value={name}
                 placeholder="Your Full Name ... "
               />
               <ErrorMessage
@@ -61,7 +79,7 @@ const Profile = ({ history }) => {
               />
             </div>
             <div className="input-group">
-              <Field type="text" name="email" placeholder="Your Email ... " />
+              <Field type="text" value={email} placeholder="Your Email ... " />
               <ErrorMessage
                 name="email"
                 component="div"

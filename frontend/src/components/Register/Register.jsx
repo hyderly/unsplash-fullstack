@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -10,10 +10,19 @@ import Loader from "../Loader/Loader";
 
 import { userRegiterAction } from "../../redux/user/user.actions";
 
-const Register = () => {
+const Register = ({ history }) => {
   const dispatch = useDispatch();
   const userRegister = useSelector(state => state.userRegister);
   const { loading, error, success } = userRegister;
+
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
+
+  useEffect(() => {
+    if (userInfo) {
+      history.push("/");
+    }
+  });
 
   const registerSchema = yup.object().shape({
     name: yup.string().required("Name is Required"),

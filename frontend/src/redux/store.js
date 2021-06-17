@@ -11,6 +11,7 @@ import {
   verifyUserReducer,
   forgotPasswordReducer,
   resetPasswordReducer,
+  userProfileReducer,
 } from "./user/user.reducers";
 
 // get local values
@@ -25,6 +26,7 @@ const rootReducers = combineReducers({
   userVerify: verifyUserReducer,
   forgotPassword: forgotPasswordReducer,
   resetPassword: resetPasswordReducer,
+  userProfile: userProfileReducer,
 });
 
 const initialValues = {

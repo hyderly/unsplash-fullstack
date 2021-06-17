@@ -10,14 +10,21 @@ import Loader from "../Loader/Loader";
 
 import { resetPasswordAction } from "../../redux/user/user.actions";
 
-const ResetPassword = ({ match }) => {
+const ResetPassword = ({ match, history }) => {
   const dispatch = useDispatch();
   const resetPassword = useSelector(state => state.resetPassword);
   const { loading, success, error } = resetPassword;
 
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
+
   useState(() => {
     if (success) {
-      match.push("/login");
+      history.push("/login");
+    }
+
+    if (userInfo) {
+      history.push("/");
     }
   }, [success]);
 
@@ -39,13 +46,18 @@ const ResetPassword = ({ match }) => {
   return (
     <Formik
       initialValues={{
-        
         password: "",
         confirmPassword: "",
       }}
       validationSchema={registerSchema}
       onSubmit={(values, { setSubmitting }) => {
-        dispatch(resetPasswordAction(values.password, valaues.confirmPassword));
+        dispatch(
+          resetPasswordAction(
+            values.password,
+            values.confirmPassword,
+            match.params.resetToken
+          )
+        );
       }}
     >
       {({ isSubmitted, isValid }) => (
