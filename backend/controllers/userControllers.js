@@ -10,7 +10,7 @@ import UserModel from "../models/UserModel.js";
 // Route: POST /api/users/register
 // Access: Public
 export const userRegister = asyncHandler(async (req, res) => {
-  const { name, email, password, confirmPassword } = req.body;
+  const { name, email, password, confirmPassword, photo } = req.body;
 
   // Check if user is exist
   const isExists = await UserModel.findOne({ email });
@@ -20,7 +20,7 @@ export const userRegister = asyncHandler(async (req, res) => {
   }
 
   // Create new user
-  const user = await UserModel.create({ name, email, password });
+  const user = await UserModel.create({ name, email, password, photo });
 
   if (user) {
     const verifyToken = await user.getVerifyToken();
@@ -119,6 +119,7 @@ export const authUser = asyncHandler(async (req, res) => {
     res.status(200).json({
       id: user._id,
       isAdmin: user.isAdmin,
+      photo: user.photo,
       name: user.name,
       verify: user.verify,
       email,

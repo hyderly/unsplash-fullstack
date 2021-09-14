@@ -7,6 +7,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: [true, "Full Name is required"],
   },
+  photo: {
+    type: String,
+    require: [false],
+
+  },
   email: {
     type: String,
     unique: true,
@@ -34,6 +39,11 @@ const userSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpiry: Date,
 });
+
+
+userSchema.post("save", function(next){
+  this.photo = `https://avatars.dicebear.com/api/identicon/${this.name.split(" ")[0]}.svg`
+})
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {

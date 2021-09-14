@@ -10,6 +10,7 @@ import connectDB from "./config/db.js";
 
 // Import Routes
 import userRoute from "./routes/userRoute.js";
+import photoRoute from './routes/photoRoutes.js'
 
 dotenv.config();
 connectDB();
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV == "development") {
 }
 
 app.use("/api/users", userRoute);
+app.use("/api/photos", photoRoute)
 
 app.use(errorHandler);
 

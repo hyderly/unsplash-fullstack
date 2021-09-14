@@ -26,3 +26,14 @@ export const protectRoute = asyncHandler(async (req, res, next) => {
     throw new Error("Token not found");
   }
 });
+
+export const AdminAuthentication = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+
+  if(!user || !user.isAdmin) {
+    res.status(401).send("Unauthorized to this route");
+
+  }
+
+  next();
+});
